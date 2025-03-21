@@ -1,13 +1,14 @@
+#[derive(Debug)]
 pub struct Instance {
-    nodes: Vec<Node>,
-    capacity: i32,
-    depo_id: i32,   
+    pub nodes: Vec<Node>,
+    pub capacity: i32,
+    pub depo_id: i32,
 }
 
+#[derive(Debug, Clone)]
 pub struct Node {
-    id: i32,
-    x: i32,
-    y: i32,
-    demand: i32,
+    pub id: i32,
+    pub x: i32,
+    pub y: i32,
+    pub demand: i32,
 }
-

@@ -5,6 +5,8 @@ mod core;
 mod random_search;
 #[path = "../core/evaluator.rs"]
 mod evaluator;
+#[path = "../algorithms/genetic_algorithm.rs"]
+mod genetic_algorithm;
 
 use core::{Node, Instance};
 use std::time::Instant;

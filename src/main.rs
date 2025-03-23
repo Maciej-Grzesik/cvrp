@@ -23,10 +23,11 @@ mod crossover;
 use core::{Node, Instance};
 use std::time::Instant;
 use plotters::prelude::*;
-use plotters::style::full_palette::BROWN;
+use plotters::style::full_palette::{BROWN, PINK};
 use crate::random_search::random_search;
 use crate::instance_loader::load_instance;
 use crate::genetic_algorithm::genetic_algorithm;
+use crate::greedy_search::greedy_search;
 macro_rules! time {
     ($expr:expr) => {{
         let start = Instant::now();
@@ -48,17 +49,17 @@ fn main() {
             return;
         }
     }
-    let (ga_distance, ga_path) = time!(genetic_algorithm(&instance));
-
-    println!("{} {:?}", ga_distance, ga_path);
+    //let (ga_distance, ga_path) = time!(genetic_algorithm(&instance));
+    let (gr_distance, gr_path) = time!(greedy_search(&instance));
+    println!("{} {:?}", gr_distance, gr_path);
     //let (shortest_path, best_index, best_path) = time!(random_search(&instance));
 
     //println!("Shortest path: {}, found at index: {}", shortest_path, best_index);
     //for node in &best_path {
         //print!("{} ", node.id);
-    //}
+    //} 
 
-    plot_best_path(&ga_path);
+    plot_best_path(&gr_path);
 }
 
 
@@ -85,7 +86,7 @@ fn plot_best_path(best_path: &Vec<Node>) {
     ).unwrap();
 
     let mut prev_node: Option<&Node> = None;
-    let line_colors = [&RED, &MAGENTA, &GREEN, &BLUE, &BROWN, &YELLOW];
+    let line_colors = [&RED, &MAGENTA, &GREEN, &BLUE, &BROWN, &YELLOW, &PINK];
     let mut color_idx = 0;
     for node in best_path {
         if let Some(prev) = prev_node {

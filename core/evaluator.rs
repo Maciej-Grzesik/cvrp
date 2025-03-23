@@ -33,6 +33,6 @@ pub fn evaluate(instance: &Instance, path: Vec<Node>) -> (f64, Vec<Node>) {
     (distance, updated_path)
 } 
 
-fn calculate_distance(n1: &Node, n2: &Node) -> f64 {
+pub fn calculate_distance(n1: &Node, n2: &Node) -> f64 {
     ((n2.x as f64 - n1.x as f64).powi(2) + (n2.y as f64 - n1.y as f64).powi(2)).sqrt()
 }

@@ -5,8 +5,20 @@ mod core;
 mod random_search;
 #[path = "../core/evaluator.rs"]
 mod evaluator;
-#[path = "../algorithms/genetic_algorithm.rs"]
+#[path = "../algorithms/genetic_algorithm//genetic_algorithm.rs"]
 mod genetic_algorithm;
+#[path = "../algorithms/greedy_search.rs"]
+mod greedy_search;
+#[path = "../algorithms/tabu_search.rs"]
+mod tabu_search;
+#[path = "../algorithms/genetic_algorithm/tournament_select.rs"]
+mod tournament_select;
+#[path = "../algorithms/genetic_algorithm/roulette_select.rs"]
+mod roulette_select;
+#[path = "../algorithms/genetic_algorithm/mutate.rs"]
+mod mutate;
+#[path = "../algorithms/genetic_algorithm/crossover.rs"]
+mod crossover;
 
 use core::{Node, Instance};
 use std::time::Instant;
@@ -14,7 +26,7 @@ use plotters::prelude::*;
 use plotters::style::full_palette::BROWN;
 use crate::random_search::random_search;
 use crate::instance_loader::load_instance;
-
+use crate::genetic_algorithm::genetic_algorithm;
 macro_rules! time {
     ($expr:expr) => {{
         let start = Instant::now();
@@ -36,15 +48,17 @@ fn main() {
             return;
         }
     }
-    
-    let (shortest_path, best_index, best_path) = time!(random_search(&instance));
+    let (ga_distance, ga_path) = time!(genetic_algorithm(&instance));
 
-    println!("Shortest path: {}, found at index: {}", shortest_path, best_index);
-    for node in &best_path {
-        print!("{} ", node.id);
-    }
+    println!("{} {:?}", ga_distance, ga_path);
+    //let (shortest_path, best_index, best_path) = time!(random_search(&instance));
 
-    plot_best_path(&best_path);
+    //println!("Shortest path: {}, found at index: {}", shortest_path, best_index);
+    //for node in &best_path {
+        //print!("{} ", node.id);
+    //}
+
+    plot_best_path(&ga_path);
 }
 
 

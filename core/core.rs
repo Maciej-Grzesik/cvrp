@@ -5,7 +5,7 @@ pub struct Instance {
     pub depo_id: i32,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Node {
     pub id: i32,
     pub x: i32,

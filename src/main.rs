@@ -5,7 +5,7 @@ mod core;
 mod random_search;
 #[path = "../core/evaluator.rs"]
 mod evaluator;
-#[path = "../algorithms/genetic_algorithm//genetic_algorithm.rs"]
+#[path = "../algorithms/genetic_algorithm/genetic_algorithm.rs"]
 mod genetic_algorithm;
 #[path = "../algorithms/greedy_search.rs"]
 mod greedy_search;

@@ -7,7 +7,7 @@ use crate::evaluator::evaluate;
 
 pub fn random_search(instance: &Instance) -> (f64, i32, Vec<Node>) {
     let mut shortest_distance = f64::INFINITY;
-    let mut best_path: Vec<Node> = Vec::new(); 
+    let mut best_path: Vec<Node> = Vec::new();
     let mut best_index = 0;
     let mut rng = rand::rng();
 

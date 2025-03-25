@@ -44,8 +44,5 @@ pub fn greedy_search(instance: &Instance) -> (f64, Vec<Node>) {
     total_distance += calculate_distance(&current_location, &instance.nodes[0]);
     path.push(instance.nodes[0].clone());
 
-
     (total_distance, path)
 }
-
-

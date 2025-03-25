@@ -1,9 +1,9 @@
 use crate::core::{Instance, Node};
-use rand::{seq::SliceRandom, Rng};
-use crate::tournament_select::tournament_selection;
 use crate::crossover::crossover;
-use crate::mutate::mutate;
 use crate::evaluator::evaluate;
+use crate::mutate::mutate;
+use crate::tournament_select::tournament_selection;
+use rand::{Rng, seq::SliceRandom};
 
 pub fn genetic_algorithm(instance: &Instance) -> (f64, Vec<Node>) {
     let generations: i32 = 1000;
@@ -13,26 +13,26 @@ pub fn genetic_algorithm(instance: &Instance) -> (f64, Vec<Node>) {
     let mut rng = rand::rng();
 
     for individual in &mut population {
-       individual[1..].shuffle(&mut rng);
+        individual[1..].shuffle(&mut rng);
     }
 
     for _ in 0..generations {
         let mut offspring: Vec<Vec<Node>> = Vec::new();
 
         for _ in 0..(generation_size / 2) {
-           let parent1 = tournament_selection(&population, instance);
-           let parent2 = tournament_selection(&population, instance);
+            let parent1 = tournament_selection(&population, instance);
+            let parent2 = tournament_selection(&population, instance);
 
-           let mut child = parent1.clone();
-           if rng.random_range(0.0..1.0) < 0.7 {
-               child = crossover(&parent1, &parent2);
-           }
+            let mut child = parent1.clone();
+            if rng.random_range(0.0..1.0) < 0.7 {
+                child = crossover(&parent1, &parent2);
+            }
 
-           if rng.random_range(0.0..1.0) < 0.05 {
-               mutate(&mut child);
-           }
+            if rng.random_range(0.0..1.0) < 0.05 {
+                mutate(&mut child);
+            }
 
-           offspring.push(child);
+            offspring.push(child);
         }
 
         population = next_gen(&population, &offspring, instance);
@@ -41,7 +41,11 @@ pub fn genetic_algorithm(instance: &Instance) -> (f64, Vec<Node>) {
     evaluate(instance, population[0].clone())
 }
 
-fn next_gen(population: &Vec<Vec<Node>>, offspring: &Vec<Vec<Node>>, instance: &Instance) -> Vec<Vec<Node>> {
+fn next_gen(
+    population: &Vec<Vec<Node>>,
+    offspring: &Vec<Vec<Node>>,
+    instance: &Instance,
+) -> Vec<Vec<Node>> {
     let mut combined = population.clone();
     combined.extend(offspring.clone());
     combined.sort_by(|a, b| {

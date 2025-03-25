@@ -1,8 +1,11 @@
-use std::{collections::HashMap, usize};
+use std::collections::HashMap;
 
 use rand::seq::SliceRandom;
+use rand::Rng;
 
 use crate::core::{Instance, Node};
+use crate::evaluator::evaluate;
+
 
 pub fn tabu_search(instance: &Instance) -> (f64, Vec<Node>) {
     let mut tabu_map: HashMap<TabuMoves, (i32, i32)> = HashMap::new();
@@ -14,8 +17,14 @@ pub fn tabu_search(instance: &Instance) -> (f64, Vec<Node>) {
     let mut best_path = path.clone();
 
     for _ in 0..1000 {
-        for node in instance.nodes.clone() {
-             
+        let mut a = rng.random_range(1..path.clone().len());
+        let mut b = rng.random_range(a..=path.len());
+        swap(&mut path, a, b);
+        two_opt(&mut path, a, b);
+        relocate(&mut path, a, b);
+        let fitness = evaluate(instance, path.clone()).0;
+        if fitness < evaluate(instance, best_path.clone()).0 {
+            best_path = path.clone();
         }
     }
 

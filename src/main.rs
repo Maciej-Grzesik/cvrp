@@ -26,6 +26,7 @@ use crate::instance_loader::load_instance;
 use crate::random_search::random_search;
 use crate::tabu_search::tabu_search;
 use core::{Instance, Node};
+use std::{fs, path};
 use plotters::prelude::*;
 use plotters::style::full_palette::{BROWN, PINK};
 use std::time::Instant;
@@ -40,30 +41,52 @@ macro_rules! time {
 }
 
 fn main() {
-    let instance: Instance = match load_instance("./instances/A-n32-k5.vrp.txt") {
-        Ok(ins) => ins,
+    println!("lest go");
+    let paths = match fs::read_dir("./instances") {
+        Ok(paths) => paths,
         Err(e) => {
-            eprintln!("Error loading instance: {}", e);
+            println!("Error reading directory: {e}");
             return;
         }
-    };  
+    };
 
-    let population_size = 100;
-    let generations = 100;
-    let iterations = 10000;
-    let (ga_best, ga_worst, ga_avg, ga_std, ga_path) = time!(genetic_algorithm(&instance, generations, population_size));
-    let (gr_distance, gr_path) = time!(greedy_search(&instance));
-    let (tabu_best, tabu_worst, tabu_avg, tabu_std, tabu_path) = time!(tabu_search(&instance, iterations, 10));
-    let (rs_best, rs_worst, rs_avg, rs_std, rs_path) = time!(random_search(&instance, iterations));
-    println!("Tabu Search: best path: {tabu_best:.1}, worst path: {tabu_worst:.1}, avg: {tabu_avg:.1},std {tabu_std:.1}");
-    println!("Genetic Algorithm: best path: {ga_best:.1}, worst path: {ga_worst:.1}, avg: {ga_avg:.1}, std: {ga_std:.1}");
-    println!("Greedy search {gr_distance:.1}");
-    println!("Random Search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
+    for entry in paths {
+        match entry {
+            Ok(entry) => {
+                let entry_path = entry.path();
+                if entry_path.extension().map(|ext| ext == "txt").unwrap_or(false){
+                    println!("Processing instance: {:?}", entry_path.display());
+                    let instance: Instance = match load_instance(entry_path.to_str().unwrap()) {
+                        Ok(ins) => ins,
+                        Err(e) => {
+                            eprintln!("Error loading instance: {}", e);
+                            return;
+                        }
+                    };  
 
-    plot_best_path(&tabu_path, "tabu_search.png");
-    plot_best_path(&ga_path, "ga_search.png");
-    plot_best_path(&gr_path, "gr_search.png");
-    plot_best_path(&rs_path, "rs_search.png");
+                    let population_size = 100;
+                    let generations = 100;
+                    let iterations = 10000;
+                    let (ga_best, ga_worst, ga_avg, ga_std, ga_path) = time!(genetic_algorithm(&instance, generations, population_size));
+                    let (gr_distance, gr_path) = time!(greedy_search(&instance));
+                    let (tabu_best, tabu_worst, tabu_avg, tabu_std, tabu_path) = time!(tabu_search(&instance, iterations, 10));
+                    let (rs_best, rs_worst, rs_avg, rs_std, rs_path) = time!(random_search(&instance, iterations));
+                    println!("Tabu Search: best path: {tabu_best:.1}, worst path: {tabu_worst:.1}, avg: {tabu_avg:.1},std {tabu_std:.1}");
+                    println!("Genetic Algorithm: best path: {ga_best:.1}, worst path: {ga_worst:.1}, avg: {ga_avg:.1}, std: {ga_std:.1}");
+                    println!("Greedy search {gr_distance:.1}");
+                    println!("Random Search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
+
+                }
+            },
+            Err(e) => {
+                eprintln!("Error reading file in directory: {e}");
+            }
+        }
+    }
+    //plot_best_path(&tabu_path, "tabu_search.png");
+    //plot_best_path(&ga_path, "ga_search.png");
+    //plot_best_path(&gr_path, "gr_search.png");
+    //plot_best_path(&rs_path, "rs_search.png");
 }
 
 

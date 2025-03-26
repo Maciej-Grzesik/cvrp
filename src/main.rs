@@ -74,7 +74,7 @@ fn main() {
                     //println!("Tabu Search: best path: {tabu_best:.1}, worst path: {tabu_worst:.1}, avg: {tabu_avg:.1},std {tabu_std:.1}");
                     //println!("Genetic Algorithm: best path: {ga_best:.1}, worst path: {ga_worst:.1}, avg: {ga_avg:.1}, std: {ga_std:.1}");
                     //println!("Greedy search {gr_distance:.1}");
-                    println!("Random Search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
+                    println!("Random search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
 
                 }
             },

@@ -1,21 +1,28 @@
+use core::f64;
+
 use crate::core::{Instance, Node};
 use crate::crossover::crossover;
 use crate::evaluator::evaluate;
 use crate::mutate::mutate;
 use crate::tournament_select::tournament_selection;
 use rand::{Rng, seq::SliceRandom};
+use statrs::function::evaluate;
+use statrs::statistics::Statistics;
 
 pub fn genetic_algorithm(
     instance: &Instance,
     generations: i32,
     population_size: i32,
-) -> (f64, Vec<Node>) {
+) -> (f64, f64, f64, f64, Vec<Node>) {
     let mut population: Vec<Vec<Node>> = vec![instance.nodes.clone(); population_size as usize];
     let mut rng = rand::rng();
 
     for individual in &mut population {
         individual[1..].shuffle(&mut rng);
     }
+
+    let mut best_runs: Vec<f64> = Vec::new();
+    let mut worst_runs: Vec<f64> = Vec::new();
 
     for _ in 0..(generations * population_size) {
         let mut offspring: Vec<Vec<Node>> = Vec::new();
@@ -37,9 +44,16 @@ pub fn genetic_algorithm(
         }
 
         population = next_gen(&population, &offspring, instance);
+        best_runs.push(evaluate(instance, population[0].clone()).0);
+        worst_runs.push(evaluate(instance, population.last().unwrap().clone()).0);
     }
+    
+    let best_run_min = best_runs.iter().cloned().min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap_or(f64::INFINITY);
+    let worst_run_max = worst_runs.iter().cloned().max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap_or(f64::NEG_INFINITY);
+    let mean = best_runs.as_slice().mean();
+    let std_dev = best_runs.std_dev();
 
-    evaluate(instance, population[0].clone())
+    (best_run_min, worst_run_max, mean, std_dev, evaluate(instance, population[0].clone()).1)
 }
 
 fn next_gen(

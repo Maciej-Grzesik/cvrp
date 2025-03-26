@@ -5,7 +5,7 @@ use statrs::statistics::Statistics;
 use crate::core::{Instance, Node};
 use crate::evaluator::evaluate;
 
-pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, Vec<Node>, f64, f64) {
+pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64, Vec<Node>) {
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();
     let mut path: Vec<Node> = instance.nodes.clone();
     let mut rng = rand::rng();
@@ -77,7 +77,7 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
     let mean = runs.as_slice().mean();
     let std_dev = runs.std_dev();
 
-    (best_fitness, evaluate(instance, best_path).1, mean, std_dev)
+    (best_fitness, worst_fitness, mean, std_dev, evaluate(instance, best_path).1)
 }
 
 fn swap(path: &mut Vec<Node>, a: usize, b: usize) {

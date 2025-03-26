@@ -1,8 +1,13 @@
 use std::collections::VecDeque;
 use rand::seq::SliceRandom;
 use statrs::statistics::Statistics;
+<<<<<<< HEAD
 
 use crate::core::{Instance, Node};
+=======
+
+use crate::core::{DistanceMatrix, Instance, Node};
+>>>>>>> e60920d (working on speeding up the code)
 use crate::evaluator::evaluate;
 <<<<<<< HEAD
 
@@ -10,13 +15,18 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
 =======
 
 pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64) {
+<<<<<<< HEAD
 >>>>>>> 7e192b6 (commiting before refactoring code)
+=======
+    let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
+>>>>>>> e60920d (working on speeding up the code)
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();
     let mut path: Vec<Node> = instance.nodes.clone();
     let mut rng = rand::rng();
     path[1..].shuffle(&mut rng);
 
-    let mut best_fitness = evaluate(instance, path.clone());
+    //let mut best_fitness = evaluate(&distance_matrix, instance);
+    let mut best_fitness = 1.0;
     let mut worst_fitness = best_fitness;
     let mut runs: Vec<f64> = Vec::new();
 
@@ -42,16 +52,16 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
                         TabuMoves::TwoOpt(a, b) => two_opt(&mut new_path, a, b),
                     }
 
-                    let new_fitness = evaluate(instance, new_path.clone());
-
-                    let is_tabu = tabu_list.contains(&move_type);
-                    let aspiration_criteria = new_fitness < best_fitness;
-
-                    if new_fitness < best_neighbor_fitness && (!is_tabu || aspiration_criteria) {
-                        best_neighbor = Some(new_path.clone());
-                        best_neighbor_fitness = new_fitness;
-                        best_move = Some(move_type);
-                    }
+                    //let new_fitness = evaluate(&distance_matrix, instance);
+                    //
+                    //let is_tabu = tabu_list.contains(&move_type);
+                    //let aspiration_criteria = new_fitness < best_fitness;
+                    //
+                    //if new_fitness < best_neighbor_fitness && (!is_tabu || aspiration_criteria) {
+                    //    best_neighbor = Some(new_path.clone());
+                    //    best_neighbor_fitness = new_fitness;
+                    //    best_move = Some(move_type);
+                    //}
                 }
             }
         }

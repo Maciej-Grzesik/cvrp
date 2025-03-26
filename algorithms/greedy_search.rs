@@ -1,7 +1,7 @@
-use crate::core::{Instance, Node};
-use crate::evaluator::calculate_distance;
+use crate::core::{DistanceMatrix, Instance, Node};
 
 pub fn greedy_search(instance: &Instance) -> (f64, Vec<Node>) {
+    let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut path: Vec<Node> = Vec::new();
     let mut remaining_customers = instance.nodes.clone();
     let mut current_capacity = instance.capacity;
@@ -18,7 +18,8 @@ pub fn greedy_search(instance: &Instance) -> (f64, Vec<Node>) {
 
         for (i, customer) in remaining_customers.iter().enumerate() {
             if current_capacity >= customer.demand {
-                let distance = calculate_distance(&current_location, customer);
+                //let distance = calculate_distance(&current_location, customer);
+                let distance = 3.0; //todo
                 if distance < min_distance {
                     min_distance = distance;
                     closest_customer = Some(customer);
@@ -34,14 +35,16 @@ pub fn greedy_search(instance: &Instance) -> (f64, Vec<Node>) {
             current_capacity -= customer.demand;
             remaining_customers.remove(index_to_remove);
         } else {
-            total_distance += calculate_distance(&current_location, &instance.nodes[0]);
+            //total_distance += calculate_distance(&current_location, &instance.nodes[0]);
+            total_distance += 3.0; //todo
             path.push(instance.nodes[0].clone());
             current_capacity += instance.capacity;
             current_location = instance.nodes[0].clone();
         }
     }
 
-    total_distance += calculate_distance(&current_location, &instance.nodes[0]);
+    //total_distance += calculate_distance(&current_location, &instance.nodes[0]);
+    total_distance += 3.0; //todo
     path.push(instance.nodes[0].clone());
 
     (total_distance, path)

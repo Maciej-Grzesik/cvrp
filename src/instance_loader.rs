@@ -69,7 +69,7 @@ pub fn load_instance(fp: &str) -> Result<Instance, io::Error> {
                                 if id == -1 {
                                     break;
                                 }
-                                depo_id = id;
+                                //depo_id = id;
                             }
                         }
                         _ => {}
@@ -86,9 +86,6 @@ pub fn load_instance(fp: &str) -> Result<Instance, io::Error> {
         }
     }
 
-    Ok(Instance {
-        nodes,
-        capacity,
-        depo_id,
-    })
+    let instance = Instance::new(nodes, capacity);
+    Ok(instance)
 }

@@ -3,7 +3,7 @@ use core::f64;
 use rand::seq::SliceRandom;
 use statrs::statistics::Statistics;
 
-use crate::core::{Instance, Node};
+use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
 
 pub fn random_search(instance: &Instance, iterations: i32) -> (f64, f64, f64, f64) {
@@ -13,11 +13,13 @@ pub fn random_search(instance: &Instance, iterations: i32) -> (f64, f64, f64, f6
 
     let mut runs: Vec<f64> = Vec::new();
 
+    let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
+
+    let mut path = instance.nodes_id.clone();
+
     for _ in 0..iterations {
-        let mut path: Vec<Node> = instance.nodes.clone();
-        let slice = &mut path[1..];
-        slice.shuffle(&mut rng);
-        let current_run = evaluate(instance, path.clone());
+        path[1..].shuffle(&mut rng);
+        let current_run = evaluate(&distance_matrix, instance, &path);
         if current_run < shortest_distance {
             shortest_distance = current_run;
         }

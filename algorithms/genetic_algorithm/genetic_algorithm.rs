@@ -5,21 +5,22 @@ use crate::mutate::mutate;
 use crate::tournament_select::tournament_selection;
 use rand::{Rng, seq::SliceRandom};
 
-pub fn genetic_algorithm(instance: &Instance) -> (f64, Vec<Node>) {
-    let generations: i32 = 1000;
-    let generation_size: usize = 1000;
-
-    let mut population: Vec<Vec<Node>> = vec![instance.nodes.clone(); generation_size];
+pub fn genetic_algorithm(
+    instance: &Instance,
+    generations: i32,
+    population_size: i32,
+) -> (f64, Vec<Node>) {
+    let mut population: Vec<Vec<Node>> = vec![instance.nodes.clone(); population_size as usize];
     let mut rng = rand::rng();
 
     for individual in &mut population {
         individual[1..].shuffle(&mut rng);
     }
 
-    for _ in 0..generations {
+    for _ in 0..(generations * population_size) {
         let mut offspring: Vec<Vec<Node>> = Vec::new();
 
-        for _ in 0..(generation_size / 2) {
+        for _ in 0..(population_size / 2) {
             let parent1 = tournament_selection(&population, instance);
             let parent2 = tournament_selection(&population, instance);
 

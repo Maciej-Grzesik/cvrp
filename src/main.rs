@@ -40,30 +40,32 @@ macro_rules! time {
 }
 
 fn main() {
-    let instance: Instance;
-    match load_instance("./instances/A-n32-k5.vrp.txt") {
-        Ok(ins) => {
-            instance = ins;
-        }
+    let instance: Instance = match load_instance("./instances/A-n32-k5.vrp.txt") {
+        Ok(ins) => ins,
         Err(e) => {
             eprintln!("Error loading instance: {}", e);
             return;
         }
-    }
-    let (ga_distance, ga_path) = time!(genetic_algorithm(&instance));
-    let (gr_distance, gr_path) =  time!(greedy_search(&instance));
-    let (tabu_distance, tabu_path) = time!(tabu_search(&instance));
-    let (rs_distance, best_index, rs_path) = time!(random_search(&instance));
-    println!("{}", tabu_distance);
-    println!("{}", ga_distance);
-    println!("{}", gr_distance);
-    println!("{}", rs_distance);
+    };  
+
+    let population_size = 100;
+    let generations = 100;
+    let iterations = 10000;
+    let (ga_distance, ga_path) = time!(genetic_algorithm(&instance, generations, population_size));
+    let (gr_distance, gr_path) = time!(greedy_search(&instance));
+    let (tabu_distance, tabu_path, tabu_worst, tabu_std) = time!(tabu_search(&instance, iterations, 10));
+    let (rs_best, rs_worst, rs_avg, rs_std, rs_path) = time!(random_search(&instance, iterations));
+    println!("Tabu Search: best path: {tabu_distance:.1}, worst path: {tabu_worst:.1}, std {tabu_std:.1}");
+    println!("Genetic Algorithm: best path: {ga_distance:.1}");
+    println!("Greedy search {gr_distance:.1}");
+    println!("Random Search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
 
     plot_best_path(&tabu_path, "tabu_search.png");
     plot_best_path(&ga_path, "ga_search.png");
     plot_best_path(&gr_path, "gr_search.png");
     plot_best_path(&rs_path, "rs_search.png");
 }
+
 
 fn plot_best_path(best_path: &Vec<Node>, name: &str) {
     let root = BitMapBackend::new(name, (800, 600)).into_drawing_area();

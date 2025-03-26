@@ -37,45 +37,43 @@ pub fn load_instance(fp: &str) -> Result<Instance, io::Error> {
                     "DEMAND_SECTION" => section = "DEMAND",
                     "DEPOT_SECTION" => section = "DEPOT",
                     "EOF" => break,
-                    _ => {
-                        match section {
-                            "NODE" => {
-                                if parts.len() == 3 {
-                                    if let (Some(id), Some(x), Some(y)) = (
-                                        parts.first().and_then(|s| s.parse().ok()),
-                                        parts.get(1).and_then(|s| s.parse().ok()),
-                                        parts.get(2).and_then(|s| s.parse().ok()),
-                                    ) {
-                                        nodes.push(Node {
-                                            id,
-                                            x,
-                                            y,
-                                            demand: 0,
-                                        });
-                                    }
+                    _ => match section {
+                        "NODE" => {
+                            if parts.len() == 3 {
+                                if let (Some(id), Some(x), Some(y)) = (
+                                    parts.first().and_then(|s| s.parse().ok()),
+                                    parts.get(1).and_then(|s| s.parse().ok()),
+                                    parts.get(2).and_then(|s| s.parse().ok()),
+                                ) {
+                                    nodes.push(Node {
+                                        id,
+                                        x,
+                                        y,
+                                        demand: 0,
+                                    });
                                 }
                             }
-                            "DEMAND" => {
-                                if parts.len() == 2 {
-                                    if let (Some(id), Some(demand)) = (
-                                        parts.first().and_then(|s| s.parse().ok()),
-                                        parts.get(1).and_then(|s| s.parse().ok()),
-                                    ) {
-                                        demands.push((id, demand));
-                                    }
-                                }
-                            }
-                            "DEPOT" => {
-                                if let Some(id) = parts.first().and_then(|s| s.parse::<i32>().ok()) {
-                                    if id == -1 {
-                                        break;
-                                    }
-                                    depo_id = id;
-                                }
-                            }
-                            _ => {}
                         }
-                    }
+                        "DEMAND" => {
+                            if parts.len() == 2 {
+                                if let (Some(id), Some(demand)) = (
+                                    parts.first().and_then(|s| s.parse().ok()),
+                                    parts.get(1).and_then(|s| s.parse().ok()),
+                                ) {
+                                    demands.push((id, demand));
+                                }
+                            }
+                        }
+                        "DEPOT" => {
+                            if let Some(id) = parts.first().and_then(|s| s.parse::<i32>().ok()) {
+                                if id == -1 {
+                                    break;
+                                }
+                                depo_id = id;
+                            }
+                        }
+                        _ => {}
+                    },
                 }
             }
             Err(e) => return Err(e),

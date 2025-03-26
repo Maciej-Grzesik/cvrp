@@ -20,4 +20,3 @@ pub fn tournament_selection(population: &Vec<Vec<Node>>, instance: &Instance) ->
 
     best.unwrap()
 }
-

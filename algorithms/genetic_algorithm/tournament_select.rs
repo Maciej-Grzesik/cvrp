@@ -11,7 +11,7 @@ pub fn tournament_selection(population: &Vec<Vec<Node>>, instance: &Instance) ->
 
     for _ in 0..tournament_size {
         let individial = population.choose(&mut rng).unwrap();
-        let (fitness, _) = evaluate(instance, individial.clone());
+        let fitness = evaluate(instance, individial.clone());
         if fitness < best_fitness {
             best_fitness = fitness;
             best = Some(individial.clone());

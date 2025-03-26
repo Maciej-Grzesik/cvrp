@@ -6,14 +6,13 @@ use crate::evaluator::evaluate;
 use crate::mutate::mutate;
 use crate::tournament_select::tournament_selection;
 use rand::{Rng, seq::SliceRandom};
-use statrs::function::evaluate;
 use statrs::statistics::Statistics;
 
 pub fn genetic_algorithm(
     instance: &Instance,
     generations: i32,
     population_size: i32,
-) -> (f64, f64, f64, f64, Vec<Node>) {
+) -> (f64, f64, f64, f64) {
     let mut population: Vec<Vec<Node>> = vec![instance.nodes.clone(); population_size as usize];
     let mut rng = rand::rng();
 
@@ -36,7 +35,7 @@ pub fn genetic_algorithm(
                 child = crossover(&parent1, &parent2);
             }
 
-            if rng.random_range(0.0..1.0) < 0.05 {
+            if rng.random_range(0.0..1.0) < 0.1 {
                 mutate(&mut child);
             }
 
@@ -44,8 +43,8 @@ pub fn genetic_algorithm(
         }
 
         population = next_gen(&population, &offspring, instance);
-        best_runs.push(evaluate(instance, population[0].clone()).0);
-        worst_runs.push(evaluate(instance, population.last().unwrap().clone()).0);
+        best_runs.push(evaluate(instance, population[0].clone()));
+        worst_runs.push(evaluate(instance, population.last().unwrap().clone()));
     }
     
     let best_run_min = best_runs.iter().cloned().min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap_or(f64::INFINITY);
@@ -53,7 +52,7 @@ pub fn genetic_algorithm(
     let mean = best_runs.as_slice().mean();
     let std_dev = best_runs.std_dev();
 
-    (best_run_min, worst_run_max, mean, std_dev, evaluate(instance, population[0].clone()).1)
+    (best_run_min, worst_run_max, mean, std_dev)
 }
 
 fn next_gen(
@@ -64,8 +63,8 @@ fn next_gen(
     let mut combined = population.clone();
     combined.extend(offspring.clone());
     combined.sort_by(|a, b| {
-        let fitness_a = evaluate(instance, a.to_vec()).0;
-        let fitness_b = evaluate(instance, b.to_vec()).0;
+        let fitness_a = evaluate(instance, a.to_vec());
+        let fitness_b = evaluate(instance, b.to_vec());
 
         fitness_a.partial_cmp(&fitness_b).unwrap()
     });

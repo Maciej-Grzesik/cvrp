@@ -4,15 +4,19 @@ use statrs::statistics::Statistics;
 
 use crate::core::{Instance, Node};
 use crate::evaluator::evaluate;
+<<<<<<< HEAD
 
 pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64, Vec<Node>) {
+=======
+
+pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64) {
+>>>>>>> 7e192b6 (commiting before refactoring code)
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();
     let mut path: Vec<Node> = instance.nodes.clone();
     let mut rng = rand::rng();
     path[1..].shuffle(&mut rng);
 
-    let mut best_fitness = evaluate(instance, path.clone()).0;
-    let mut best_path = path.clone();
+    let mut best_fitness = evaluate(instance, path.clone());
     let mut worst_fitness = best_fitness;
     let mut runs: Vec<f64> = Vec::new();
 
@@ -38,7 +42,7 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
                         TabuMoves::TwoOpt(a, b) => two_opt(&mut new_path, a, b),
                     }
 
-                    let new_fitness = evaluate(instance, new_path.clone()).0;
+                    let new_fitness = evaluate(instance, new_path.clone());
 
                     let is_tabu = tabu_list.contains(&move_type);
                     let aspiration_criteria = new_fitness < best_fitness;
@@ -62,7 +66,6 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
             }
 
             if best_neighbor_fitness < best_fitness || rand::random::<f64>() < 0.05 {
-                best_path = path.clone();
                 best_fitness = best_neighbor_fitness;
             }
 
@@ -77,7 +80,7 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
     let mean = runs.as_slice().mean();
     let std_dev = runs.std_dev();
 
-    (best_fitness, worst_fitness, mean, std_dev, evaluate(instance, best_path).1)
+    (best_fitness, worst_fitness, mean, std_dev)
 }
 
 fn swap(path: &mut Vec<Node>, a: usize, b: usize) {

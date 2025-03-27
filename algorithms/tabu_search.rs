@@ -1,11 +1,9 @@
 use std::collections::VecDeque;
 use rand::seq::SliceRandom;
-use statrs::statistics::Statistics;
-
 use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
 
-pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64) {
+pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> f64 {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();
     let mut path: Vec<i32> = instance.nodes_id.clone();
@@ -68,10 +66,8 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
 
     //let mean = runs.as_slice().mean();
     //let std_dev = runs.std_dev();
-    let (mean, std_dev) = (1.0, 2.0);
-    let worst_fitness = 1.0;
 
-    (best_fitness, worst_fitness, mean, std_dev)
+    best_fitness
 }
 
 fn swap(path: &mut Vec<i32>, a: usize, b: usize) {

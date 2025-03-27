@@ -10,7 +10,7 @@ pub fn genetic_algorithm(
     instance: &Instance,
     generations: i32,
     population_size: i32,
-) -> (f64, f64, f64, f64) {
+) -> f64 {
     let mut population: Vec<Vec<i32>> = vec![instance.nodes_id.clone(); population_size as usize];
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut rng = rand::rng();
@@ -24,11 +24,11 @@ pub fn genetic_algorithm(
     for _ in 0..(generations * population_size) {
         let mut offspring: Vec<Vec<i32>> = Vec::new();
 
-        for _ in 0..(population_size / 2) {
+        for _ in 0..(population_size) {
             let use_parent = rng.random_range(0.0..1.0) < 0.1; 
 
-            let mut parent1 = tournament_selection(&population, instance, &distance_matrix); 
-            let mut parent2 = tournament_selection(&population, instance, &distance_matrix);
+            let mut parent1 = tournament_selection(&population, instance, &distance_matrix, &mut rng); 
+            let mut parent2 = tournament_selection(&population, instance, &distance_matrix, &mut rng);
             
             if !use_parent {
                 parent1 = population.choose(&mut rng).unwrap().to_vec();
@@ -38,11 +38,11 @@ pub fn genetic_algorithm(
 
             let mut child = parent1.clone();
             if rng.random_range(0.0..1.0) < 0.7 {
-                child = crossover(&parent1, &parent2);
+                child = crossover(&parent1, &parent2, &mut rng);
             }
 
             if rng.random_range(0.0..1.0) < 0.1 {
-                mutate(&mut child);
+                mutate(&mut child, &mut rng);
             }
 
             offspring.push(child);
@@ -55,10 +55,7 @@ pub fn genetic_algorithm(
         }
     }
     
-    let worst_run_max =1.0;
-    let mean = 3.0;
-    let std_dev =3.0;
-    (best_run, worst_run_max, mean, std_dev)
+    best_run
 }
 
 fn next_gen(
@@ -69,12 +66,15 @@ fn next_gen(
 ) -> Vec<Vec<i32>> {
     let mut combined = population.clone();
     combined.extend(offspring.clone());
+
     combined.sort_by(|a, b| {
         let fitness_a = evaluate(distance_matrix, instance, a);
         let fitness_b = evaluate(distance_matrix, instance, b);
 
         fitness_a.partial_cmp(&fitness_b).unwrap()
     });
+
     combined.truncate(population.len());
+
     combined
 }

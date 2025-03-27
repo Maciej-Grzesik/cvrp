@@ -1,6 +1,6 @@
-use rand::random_range;
+use rand::{random_range, rngs::ThreadRng};
 
-pub fn mutate(individual: &mut Vec<i32>) {
+pub fn mutate(individual: &mut Vec<i32>, rng: &mut ThreadRng) {
     let a = random_range(1..individual.len());
 
     let mut b = random_range(1..individual.len());

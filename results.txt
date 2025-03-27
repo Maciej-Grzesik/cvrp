@@ -1,0 +1,35 @@
+Instance: ./instances/A-n32-k5.vrp.txt
+Random Search: Best: 1642.9, Worst: 1768.4, Avg: 1714.4, Std Dev: 43.9
+Greedy Search: Distance: 1054.3
+Genetic Algorithm: Best: 824.3, Worst: 1114.9, Avg: 915.1, Std Dev: 77.2
+Tabu Search: Best: 866.9, Worst: 988.2, Avg: 931.7, Std Dev: 37.8
+Instance: ./instances/A-n60-k9.vrp.txt
+Random Search: Best: 3207.5, Worst: 3377.9, Avg: 3291.7, Std Dev: 52.4
+Greedy Search: Distance: 1818.6
+Genetic Algorithm: Best: 1423.6, Worst: 1737.1, Avg: 1547.9, Std Dev: 91.5
+Tabu Search: Best: 1486.1, Worst: 1711.4, Avg: 1624.8, Std Dev: 74.1
+Instance: ./instances/A-n48-k7.vrp.txt
+Random Search: Best: 2372.1, Worst: 2579.0, Avg: 2479.3, Std Dev: 70.9
+Greedy Search: Distance: 1460.5
+Genetic Algorithm: Best: 1086.7, Worst: 1389.2, Avg: 1217.2, Std Dev: 98.1
+Tabu Search: Best: 1198.1, Worst: 1305.4, Avg: 1229.6, Std Dev: 31.3
+Instance: ./instances/A-n45-k6.vrp.txt
+Random Search: Best: 2363.6, Worst: 2543.7, Avg: 2446.5, Std Dev: 59.7
+Greedy Search: Distance: 1240.2
+Genetic Algorithm: Best: 1054.4, Worst: 1290.1, Avg: 1202.3, Std Dev: 90.3
+Tabu Search: Best: 1004.5, Worst: 1200.9, Avg: 1143.8, Std Dev: 57.9
+Instance: ./instances/A-n37-k5.vrp.txt
+Random Search: Best: 1555.0, Worst: 1655.6, Avg: 1613.4, Std Dev: 34.9
+Greedy Search: Distance: 847.4
+Genetic Algorithm: Best: 798.8, Worst: 981.3, Avg: 888.3, Std Dev: 66.6
+Tabu Search: Best: 719.1, Worst: 833.7, Avg: 773.1, Std Dev: 39.8
+Instance: ./instances/A-n39-k5.vrp.txt
+Random Search: Best: 1777.9, Worst: 1878.5, Avg: 1808.3, Std Dev: 33.9
+Greedy Search: Distance: 1113.6
+Genetic Algorithm: Best: 917.2, Worst: 1034.3, Avg: 991.4, Std Dev: 38.7
+Tabu Search: Best: 837.3, Worst: 958.5, Avg: 875.8, Std Dev: 34.4
+Instance: ./instances/A-n54-k7.vrp.txt
+Random Search: Best: 2758.3, Worst: 2942.6, Avg: 2866.1, Std Dev: 56.1
+Greedy Search: Distance: 1415.9
+Genetic Algorithm: Best: 1286.1, Worst: 1432.2, Avg: 1376.2, Std Dev: 58.1
+Tabu Search: Best: 1239.9, Worst: 1389.0, Avg: 1310.1, Std Dev: 45.9

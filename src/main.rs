@@ -57,6 +57,7 @@ fn main() {
                 if entry_path.extension().map(|ext| ext == "txt").unwrap_or(false){
                     println!("Processing instance: {:?}", entry_path.display());
                     let instance: Instance = match load_instance(entry_path.to_str().unwrap()) {
+                    //let instance: Instance = match load_instance("./instances/A-n32-k5.vrp.txt") { 
                         Ok(ins) => ins,
                         Err(e) => {
                             eprintln!("Error loading instance: {}", e);
@@ -68,13 +69,13 @@ fn main() {
                     let generations = 100;
                     let iterations = 10000;
                     //let (ga_best, ga_worst, ga_avg, ga_std) = time!(genetic_algorithm(&instance, generations, population_size));
-                    //let (gr_distance, gr_path) = time!(greedy_search(&instance));
-                    //let (tabu_best, tabu_worst, tabu_avg, tabu_std, tabu_path) = time!(tabu_search(&instance, iterations, 10));
-                    let (rs_best, rs_worst, rs_avg, rs_std) = time!(random_search(&instance, iterations));
-                    //println!("Tabu Search: best path: {tabu_best:.1}, worst path: {tabu_worst:.1}, avg: {tabu_avg:.1},std {tabu_std:.1}");
+                    //let gr_distance = time!(greedy_search(&instance));
+                    let (tabu_best, tabu_worst, tabu_avg, tabu_std) = time!(tabu_search(&instance, iterations, 10));
+                    //let (rs_best, rs_worst, rs_avg, rs_std) = time!(random_search(&instance, iterations));
+                    println!("Tabu Search: best path: {tabu_best:.1}, worst path: {tabu_worst:.1}, avg: {tabu_avg:.1},std {tabu_std:.1}");
                     //println!("Genetic Algorithm: best path: {ga_best:.1}, worst path: {ga_worst:.1}, avg: {ga_avg:.1}, std: {ga_std:.1}");
                     //println!("Greedy search {gr_distance:.1}");
-                    println!("Random search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
+                    //println!("Random search: best path: {rs_best:.1}, worst path {rs_worst:.1}, avg {rs_avg:.1}, std {rs_std:.1}");
 
                 }
             },

@@ -1,51 +1,49 @@
-use crate::core::{DistanceMatrix, Instance, Node};
+use crate::core::{DistanceMatrix, Instance};
 
-pub fn greedy_search(instance: &Instance) -> (f64, Vec<Node>) {
+pub fn greedy_search(instance: &Instance) -> f64 {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
-    let mut path: Vec<Node> = Vec::new();
-    let mut remaining_customers = instance.nodes.clone();
+    
+    let mut remaining_customers = instance.nodes_id.clone();
+    remaining_customers.remove(0);
+
     let mut current_capacity = instance.capacity;
     let mut total_distance = 0.0;
 
-    let mut current_location = instance.nodes[0].clone();
-
-    path.push(current_location.clone());
+    let depot = instance.nodes_id[0] - 1;
+    let mut current_location = depot;
 
     while !remaining_customers.is_empty() {
-        let mut closest_customer: Option<&Node> = None;
+        let mut closest_customer: Option<i32> = None;
         let mut min_distance = f64::INFINITY;
-        let mut index_to_remove = 0;
+        let mut index_to_remove: Option<usize> = None;
 
-        for (i, customer) in remaining_customers.iter().enumerate() {
-            if current_capacity >= customer.demand {
-                //let distance = calculate_distance(&current_location, customer);
-                let distance = 3.0; //todo
+        for (index, &customer) in remaining_customers.iter().enumerate() {
+            if current_capacity >= distance_matrix.get_demand(customer - 1) {
+                let distance = distance_matrix.get_distance(current_location, customer - 1);
                 if distance < min_distance {
                     min_distance = distance;
-                    closest_customer = Some(customer);
-                    index_to_remove = i;
+                    closest_customer = Some(customer - 1);
+                    index_to_remove = Some(index);
                 }
             }
         }
 
         if let Some(customer) = closest_customer {
-            path.push(customer.clone());
             total_distance += min_distance;
-            current_location = customer.clone();
-            current_capacity -= customer.demand;
-            remaining_customers.remove(index_to_remove);
+            current_location = customer;
+            current_capacity -= distance_matrix.get_demand(customer - 1);
+            if let Some(idx) = index_to_remove {
+                remaining_customers.remove(idx);
+            }
         } else {
-            //total_distance += calculate_distance(&current_location, &instance.nodes[0]);
-            total_distance += 3.0; //todo
-            path.push(instance.nodes[0].clone());
+            total_distance += distance_matrix.get_distance(current_location, depot);
             current_capacity += instance.capacity;
-            current_location = instance.nodes[0].clone();
+            current_location = depot;
         }
     }
 
-    //total_distance += calculate_distance(&current_location, &instance.nodes[0]);
-    total_distance += 3.0; //todo
-    path.push(instance.nodes[0].clone());
+    total_distance += distance_matrix.get_distance(current_location, depot);
 
-    (total_distance, path)
+
+    total_distance
 }

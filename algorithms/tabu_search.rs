@@ -5,7 +5,6 @@ use crate::core::{Instance, Node};
 use crate::core::{DistanceMatrix, Instance, Node};
 use crate::evaluator::evaluate;
 
-pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64, Vec<Node>) {
 pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64) {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();

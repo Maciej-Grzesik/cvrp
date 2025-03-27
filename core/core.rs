@@ -1,3 +1,5 @@
+use std::usize;
+
 #[derive(Debug)]
 pub struct Instance {
     pub nodes: Vec<Node>,

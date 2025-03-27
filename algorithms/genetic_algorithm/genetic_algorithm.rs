@@ -1,19 +1,17 @@
-use core::f64;
-
-use crate::core::{DistanceMatrix, Instance, Node};
+use crate::core::{DistanceMatrix, Instance};
 use crate::crossover::crossover;
 use crate::evaluator::evaluate;
 use crate::mutate::mutate;
 use crate::tournament_select::tournament_selection;
+use rand::seq::IndexedRandom;
 use rand::{Rng, seq::SliceRandom};
-use statrs::statistics::Statistics;
 
 pub fn genetic_algorithm(
     instance: &Instance,
     generations: i32,
     population_size: i32,
-) -> (f64, f64, f64, f64) {
-    let mut population: Vec<Vec<Node>> = vec![instance.nodes.clone(); population_size as usize];
+) -> f64 {
+    let mut population: Vec<Vec<i32>> = vec![instance.nodes_id.clone(); population_size as usize];
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut rng = rand::rng();
 
@@ -21,56 +19,62 @@ pub fn genetic_algorithm(
         individual[1..].shuffle(&mut rng);
     }
 
-    let mut best_runs: Vec<f64> = Vec::new();
-    let mut worst_runs: Vec<f64> = Vec::new();
+    let mut best_run: f64 = f64::INFINITY;
 
     for _ in 0..(generations * population_size) {
-        let mut offspring: Vec<Vec<Node>> = Vec::new();
+        let mut offspring: Vec<Vec<i32>> = Vec::new();
 
-        for _ in 0..(population_size / 2) {
-            let parent1 = tournament_selection(&population, instance, &distance_matrix);
-            let parent2 = tournament_selection(&population, instance, &distance_matrix);
+        for _ in 0..(population_size) {
+            let use_parent = rng.random_range(0.0..1.0) < 0.1; 
+
+            let mut parent1 = tournament_selection(&population, instance, &distance_matrix, &mut rng); 
+            let mut parent2 = tournament_selection(&population, instance, &distance_matrix, &mut rng);
+            
+            if !use_parent {
+                parent1 = population.choose(&mut rng).unwrap().to_vec();
+                parent2 = population.choose(&mut rng).unwrap().to_vec();
+
+            }
 
             let mut child = parent1.clone();
             if rng.random_range(0.0..1.0) < 0.7 {
-                child = crossover(&parent1, &parent2);
+                child = crossover(&parent1, &parent2, &mut rng);
             }
 
             if rng.random_range(0.0..1.0) < 0.1 {
-                mutate(&mut child);
+                mutate(&mut child, &mut rng);
             }
 
             offspring.push(child);
         }
 
         population = next_gen(&population, &offspring, instance, &distance_matrix);
-        //best_runs.push(evaluate(instance, population[0].clone()));
-        //worst_runs.push(evaluate(instance, population.last().unwrap().clone()));
+        let current_run = evaluate(&distance_matrix, instance, &population[0]);
+        if current_run < best_run {
+            best_run = current_run;
+        }
     }
     
-    let best_run_min = best_runs.iter().cloned().min_by(|a, b| a.partial_cmp(b).unwrap()).unwrap_or(f64::INFINITY);
-    let worst_run_max = worst_runs.iter().cloned().max_by(|a, b| a.partial_cmp(b).unwrap()).unwrap_or(f64::NEG_INFINITY);
-    let mean = best_runs.as_slice().mean();
-    let std_dev = best_runs.std_dev();
-
-    (best_run_min, worst_run_max, mean, std_dev)
+    best_run
 }
 
 fn next_gen(
-    population: &Vec<Vec<Node>>,
-    offspring: &Vec<Vec<Node>>,
+    population: &Vec<Vec<i32>>,
+    offspring: &Vec<Vec<i32>>,
     instance: &Instance,
     distance_matrix: &DistanceMatrix,
-) -> Vec<Vec<Node>> {
-    //let mut combined = population.clone();
-    //combined.extend(offspring.clone());
-    //combined.sort_by(|a, b| {
-        //let fitness_a = evaluate(distance_matrix, instance);
-        //let fitness_b = evaluate(distance_matrix, instance);
+) -> Vec<Vec<i32>> {
+    let mut combined = population.clone();
+    combined.extend(offspring.clone());
 
-    //    fitness_a.partial_cmp(&fitness_b).unwrap()
-    //});
-    //combined.truncate(population.len());
-    //combined
-    vec![vec![Node {id: 1, x:1, y:1, demand:1 }]]
+    combined.sort_by(|a, b| {
+        let fitness_a = evaluate(distance_matrix, instance, a);
+        let fitness_b = evaluate(distance_matrix, instance, b);
+
+        fitness_a.partial_cmp(&fitness_b).unwrap()
+    });
+
+    combined.truncate(population.len());
+
+    combined
 }

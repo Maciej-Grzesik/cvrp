@@ -1,27 +1,21 @@
-use crate::core::Node;
-use rand::Rng;
+use rand::{rngs::ThreadRng, Rng};
 
-pub fn crossover(parent1: &Vec<Node>, parent2: &Vec<Node>) -> Vec<Node> {
-    let mut rng = rand::rng();
+pub fn crossover(parent1: &Vec<i32>, parent2: &Vec<i32>, rng: &mut ThreadRng) -> Vec<i32> {
     let size = parent1.len();
-    let mut child = vec![None; size];
+    let mut child = vec![0; size];
 
-    let start = rng.random_range(1..size / 2);
-    let end = rng.random_range(size / 2..size - 1);
+    let start = rng.random_range(1..size - 1);
+    let end = rng.random_range(start + 1..size);
 
-    for i in start..end {
-        child[i] = Some(parent1[i].clone());
-    }
+    child[start..=end].clone_from_slice(&parent1[start..=end]);
 
-    let mut index = 0;
-    for node in parent2 {
-        if !child.contains(&Some(node.clone())) {
-            while child[index].is_some() {
-                index += 1;
-            }
-            child[index] = Some(node.clone());
+    let mut pos = (end + 1) % size;
+    for &gene in parent2.iter() {
+        if !child.contains(&gene) {
+            child[pos] = gene;
+            pos = (pos + 1) % size;
         }
     }
 
-    child.into_iter().map(|x| x.unwrap()).collect()
+    child
 }

@@ -1,12 +1,9 @@
 use core::f64;
-
 use rand::seq::SliceRandom;
-use statrs::statistics::Statistics;
-
 use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
 
-pub fn random_search(instance: &Instance, iterations: i32) -> (f64, f64, f64, f64) {
+pub fn random_search(instance: &Instance, iterations: i32) -> f64 {
     let mut shortest_distance = f64::INFINITY;
     let mut longest_distance = -f64::INFINITY;
     let mut rng = rand::rng();
@@ -30,8 +27,8 @@ pub fn random_search(instance: &Instance, iterations: i32) -> (f64, f64, f64, f6
         runs.push(current_run);
     }
 
-    let mean = runs.as_slice().mean();
-    let std_dev = runs.std_dev();
+    //let mean = runs.as_slice().mean();
+    //let std_dev = runs.std_dev();
 
-    (shortest_distance, longest_distance, mean, std_dev)
+    shortest_distance
 }

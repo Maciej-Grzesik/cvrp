@@ -1,16 +1,22 @@
 use std::collections::VecDeque;
 use rand::seq::SliceRandom;
-use crate::core::{DistanceMatrix, Instance};
+use statrs::statistics::Statistics;
+use crate::core::{Instance, Node};
+use crate::core::{DistanceMatrix, Instance, Node};
 use crate::evaluator::evaluate;
 
-pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> f64 {
+pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64, Vec<Node>) {
+pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f64, f64, f64, f64) {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut tabu_list: VecDeque<TabuMoves> = VecDeque::new();
-    let mut path: Vec<i32> = instance.nodes_id.clone();
+    let mut path: Vec<Node> = instance.nodes.clone();
     let mut rng = rand::rng();
     path[1..].shuffle(&mut rng);
 
-    let mut best_fitness = evaluate(&distance_matrix, instance, &path);
+    //let mut best_fitness = evaluate(&distance_matrix, instance);
+    let mut best_fitness = 1.0;
+    let mut worst_fitness = best_fitness;
+    let mut runs: Vec<f64> = Vec::new();
 
     for _ in 0..iterations {
         let mut best_neighbor = None;
@@ -34,16 +40,16 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> f6
                         TabuMoves::TwoOpt(a, b) => two_opt(&mut new_path, a, b),
                     }
 
-                    let new_fitness = evaluate(&distance_matrix, instance, &new_path);
-
-                    let is_tabu = tabu_list.contains(&move_type);
-                    let aspiration_criteria = new_fitness < best_fitness;
-
-                    if new_fitness < best_neighbor_fitness && (!is_tabu || aspiration_criteria) {
-                        best_neighbor = Some(new_path);
-                        best_neighbor_fitness = new_fitness;
-                        best_move = Some(move_type);
-                    }
+                    //let new_fitness = evaluate(&distance_matrix, instance);
+                    //
+                    //let is_tabu = tabu_list.contains(&move_type);
+                    //let aspiration_criteria = new_fitness < best_fitness;
+                    //
+                    //if new_fitness < best_neighbor_fitness && (!is_tabu || aspiration_criteria) {
+                    //    best_neighbor = Some(new_path.clone());
+                    //    best_neighbor_fitness = new_fitness;
+                    //    best_move = Some(move_type);
+                    //}
                 }
             }
         }
@@ -60,21 +66,26 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> f6
             if best_neighbor_fitness < best_fitness || rand::random::<f64>() < 0.05 {
                 best_fitness = best_neighbor_fitness;
             }
+
+            if best_neighbor_fitness > worst_fitness {
+                worst_fitness = best_neighbor_fitness;
+            }
+
+            runs.push(best_neighbor_fitness);
         }
-        //println!("{best_fitness}");
     }
 
-    //let mean = runs.as_slice().mean();
-    //let std_dev = runs.std_dev();
+    let mean = runs.as_slice().mean();
+    let std_dev = runs.std_dev();
 
-    best_fitness
+    (best_fitness, worst_fitness, mean, std_dev)
 }
 
-fn swap(path: &mut Vec<i32>, a: usize, b: usize) {
+fn swap(path: &mut Vec<Node>, a: usize, b: usize) {
     path.swap(a, b);
 }
 
-fn relocate(path: &mut Vec<i32>, a: usize, b: usize) {
+fn relocate(path: &mut Vec<Node>, a: usize, b: usize) {
     if a == b || a >= path.len() || b >= path.len() {
         return;
     }
@@ -82,7 +93,7 @@ fn relocate(path: &mut Vec<i32>, a: usize, b: usize) {
     path.insert(b, element);
 }
 
-fn two_opt(path: &mut Vec<i32>, a: usize, b: usize) {
+fn two_opt(path: &mut Vec<Node>, a: usize, b: usize) {
     if a >= b || b >= path.len() {
         return;
     }

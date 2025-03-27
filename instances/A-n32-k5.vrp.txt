@@ -1,4 +1,4 @@
-NAME : A-n32-k5
+AME : A-n32-k5
 COMMENT : (Augerat et al, No of trucks: 5, Optimal value: 784)
 TYPE : CVRP
 DIMENSION : 32

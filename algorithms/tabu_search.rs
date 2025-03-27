@@ -51,6 +51,7 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
         }
 
         if let Some(new_path) = best_neighbor {
+            path = new_path;
             if let Some(mv) = best_move {
                 tabu_list.push_back(mv);
                 if tabu_list.len() > tabu_size {
@@ -62,6 +63,7 @@ pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> (f
                 best_fitness = best_neighbor_fitness;
             }
         }
+        //println!("{best_fitness}");
     }
 
     //let mean = runs.as_slice().mean();

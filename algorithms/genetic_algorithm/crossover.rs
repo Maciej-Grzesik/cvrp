@@ -1,7 +1,6 @@
-use crate::core::Node;
 use rand::Rng;
 
-pub fn crossover(parent1: &Vec<Node>, parent2: &Vec<Node>) -> Vec<Node> {
+pub fn crossover(parent1: &Vec<i32>, parent2: &Vec<i32>) -> Vec<i32> {
     let mut rng = rand::rng();
     let size = parent1.len();
     let mut child = vec![None; size];
@@ -10,16 +9,16 @@ pub fn crossover(parent1: &Vec<Node>, parent2: &Vec<Node>) -> Vec<Node> {
     let end = rng.random_range(size / 2..size - 1);
 
     for i in start..end {
-        child[i] = Some(parent1[i].clone());
+        child[i] = Some(parent1[i]);
     }
 
     let mut index = 0;
     for node in parent2 {
-        if !child.contains(&Some(node.clone())) {
+        if !child.contains(&Some(*node)) {
             while child[index].is_some() {
                 index += 1;
             }
-            child[index] = Some(node.clone());
+            child[index] = Some(*node);
         }
     }
 

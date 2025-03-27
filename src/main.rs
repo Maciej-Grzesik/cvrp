@@ -98,14 +98,6 @@ fn main() {
                     let gr_distance = time!(greedy_search(&instance));
 
                     let _ = save_stats_to_file("results.txt", entry_path.to_str().unwrap(), tabu_stats, ga_stats, rs_stats, gr_distance);
-                    println!("Tabu Search Stats: Best: {:.1}, Worst: {:.1}, Avg: {:.1}, Std Dev: {:.1}",
-                        tabu_stats.0, tabu_stats.1, tabu_stats.2, tabu_stats.3);
-                    println!("Genetic Algorithm Stats: Best: {:.1}, Worst: {:.1}, Avg: {:.1}, Std Dev: {:.1}",
-                        ga_stats.0, ga_stats.1, ga_stats.2, ga_stats.3);
-                    println!("Random Search Stats: Best: {:.1}, Worst: {:.1}, Avg: {:.1}, Std Dev: {:.1}", 
-                        rs_stats.0, rs_stats.1, rs_stats.2, rs_stats.3);
-                    println!("Greedy search {gr_distance:.1}");
-
                 }
             },
             Err(e) => {

@@ -33,3 +33,8 @@ Random Search: Best: 2758.3, Worst: 2942.6, Avg: 2866.1, Std Dev: 56.1
 Greedy Search: Distance: 1415.9
 Genetic Algorithm: Best: 1286.1, Worst: 1432.2, Avg: 1376.2, Std Dev: 58.1
 Tabu Search: Best: 1239.9, Worst: 1389.0, Avg: 1310.1, Std Dev: 45.9
+Instance: ./instances/A-n32-k5.vrp.txt
+Random Search: Best: 1654.8, Worst: 1742.5, Avg: 1703.0, Std Dev: 29.2
+Greedy Search: Distance: 1054.3
+Genetic Algorithm: Best: 768.3, Worst: 1037.2, Avg: 855.5, Std Dev: 76.6
+Tabu Search: Best: 882.8, Worst: 1007.6, Avg: 936.7, Std Dev: 39.5

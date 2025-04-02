@@ -25,8 +25,9 @@ use crate::greedy_search::greedy_search;
 use crate::instance_loader::load_instance;
 use crate::random_search::random_search;
 use crate::tabu_search::tabu_search;
-use core::{Instance, Node};
+use core::{Instance, Node, DistanceMatrix};
 use std::{f64, fs};
+use evaluator::evaluate;
 use plotters::prelude::*;
 use plotters::style::full_palette::{BROWN, PINK};
 use std::time::Instant;
@@ -46,6 +47,19 @@ macro_rules! time {
 }
 
 fn main() {
+    //let ins: Instance = match load_instance("./instances/A-n32-k5.vrp.txt") {
+    //    Ok(i) => i,
+    //    Err(e) => return,
+    //};
+    //
+    //let distance_matrix = DistanceMatrix::new(&ins.nodes);
+    //let path = vec![0, 21, 31, 19, 17, 13, 7, 26, 12, 1, 16, 30, 27, 24, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 14, 28, 11, 4, 23, 3, 2, 5];
+    ////let path = vec![18, 8, 9, 22, 15, 29, 10, 25, 5, 20, 28, 11, 4, 23, 2, 3, 6, 21, 31, 19, 17, 13, 7, 27, 24, 14, 26, 16, 30, 12, 1];
+    //let new: Vec<i32> = path.iter().map(|&x| x+1).collect();
+    //let dis = evaluate(&distance_matrix, &ins, &new);
+    //print!("dista {dis}");
+
+
     println!("lest go");
     let paths = match fs::read_dir("./instances") {
         Ok(paths) => paths,
@@ -74,7 +88,7 @@ fn main() {
                     let generations = 100;
                     let iterations = 10000;
 
-                    
+
                     let tabu_search = TabuSearch {
                         instance: &instance,
                         iterations,

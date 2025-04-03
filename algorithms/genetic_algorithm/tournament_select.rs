@@ -1,11 +1,16 @@
-use rand::seq::IndexedRandom;
 use rand::Rng;
+use rand::seq::IndexedRandom;
 
 use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
 use rand::rngs::ThreadRng;
 
-pub fn tournament_selection(population: &Vec<Vec<i32>>, instance: &Instance, distance_matrix: &DistanceMatrix, rng: &mut ThreadRng) -> Vec<i32> {
+pub fn tournament_selection(
+    population: &Vec<Vec<i32>>,
+    instance: &Instance,
+    distance_matrix: &DistanceMatrix,
+    rng: &mut ThreadRng,
+) -> Vec<i32> {
     let tournament_size = 5;
     let selection_pressure = 0.75;
 

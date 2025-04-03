@@ -1,14 +1,14 @@
-use core::f64;
-use rand::seq::SliceRandom;
 use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
+use core::f64;
+use rand::seq::SliceRandom;
 
 pub fn random_search(instance: &Instance, iterations: i32) -> f64 {
     let mut shortest_distance = f64::INFINITY;
-    let mut longest_distance = -f64::INFINITY;
+    //let mut longest_distance = -f64::INFINITY;
     let mut rng = rand::rng();
 
-    let mut runs: Vec<f64> = Vec::new();
+    //let mut runs: Vec<f64> = Vec::new();
 
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
 
@@ -20,11 +20,11 @@ pub fn random_search(instance: &Instance, iterations: i32) -> f64 {
         if current_run < shortest_distance {
             shortest_distance = current_run;
         }
-        if current_run > longest_distance {
-            longest_distance = current_run;
-        }
+        //if current_run > longest_distance {
+        //    longest_distance = current_run;
+        //}
 
-        runs.push(current_run);
+        //runs.push(current_run);
     }
 
     //let mean = runs.as_slice().mean();

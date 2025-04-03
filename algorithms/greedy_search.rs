@@ -2,7 +2,7 @@ use crate::core::{DistanceMatrix, Instance};
 
 pub fn greedy_search(instance: &Instance) -> f64 {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
-    
+
     let mut remaining_customers = instance.nodes_id.clone();
     remaining_customers.remove(0);
 
@@ -43,7 +43,6 @@ pub fn greedy_search(instance: &Instance) -> f64 {
     }
 
     total_distance += distance_matrix.get_distance(current_location, depot);
-
 
     total_distance
 }

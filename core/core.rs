@@ -11,10 +11,14 @@ impl Instance {
     pub fn new(nodes: Vec<Node>, capacity: i32) -> Self {
         let nodes_id = nodes.iter().map(|node| node.id).collect();
 
-        Self { nodes, nodes_id, capacity }
+        Self {
+            nodes,
+            nodes_id,
+            capacity,
+        }
     }
 }
-// kazda metoda przytjmuje instancje i evaluator daje 
+// kazda metoda przytjmuje instancje i evaluator daje
 // matrix dystansow i path i32
 
 #[derive(Debug, Clone, PartialEq)]
@@ -27,8 +31,8 @@ pub struct Node {
 
 #[derive(Debug)]
 pub struct DistanceMatrix {
-   matrix: Vec<Vec<f64>>,
-   demand: Vec<i32>,
+    matrix: Vec<Vec<f64>>,
+    pub demand: Vec<i32>,
 }
 
 impl DistanceMatrix {
@@ -60,4 +64,3 @@ impl DistanceMatrix {
         self.demand[i as usize]
     }
 }
-

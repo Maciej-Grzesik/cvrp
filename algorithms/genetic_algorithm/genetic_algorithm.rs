@@ -6,13 +6,20 @@ use crate::tournament_select::tournament_selection;
 use rand::seq::IndexedRandom;
 use rand::{Rng, seq::SliceRandom};
 
-pub fn genetic_algorithm(instance: &Instance, generations: i32, population_size: i32) -> f64 {
+pub fn genetic_algorithm(
+    instance: &Instance,
+    generations: i32,
+    population_size: i32,
+    crossover_probability: f64,
+    mutation_probability: f64,
+) -> f64 {
     let mut population: Vec<Vec<i32>> = vec![instance.nodes_id.clone(); population_size as usize];
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut rng = rand::rng();
 
     for individual in &mut population {
-        individual[1..].shuffle(&mut rng);
+        individual.remove(0);
+        individual.shuffle(&mut rng);
     }
 
     let mut best_run: f64 = f64::INFINITY;
@@ -34,14 +41,12 @@ pub fn genetic_algorithm(instance: &Instance, generations: i32, population_size:
             }
 
             let mut child = parent1.clone();
-            if rng.random_range(0.0..1.0) < 0.7 {
+            if rng.random_range(0.0..1.0) < crossover_probability {
                 child = crossover(&parent1, &parent2, &mut rng);
             }
-
-            if rng.random_range(0.0..1.0) < 0.1 {
+            if rng.random_range(0.0..1.0) < mutation_probability {
                 mutate(&mut child, &mut rng);
             }
-
             offspring.push(child);
         }
 

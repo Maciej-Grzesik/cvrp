@@ -38,3 +38,18 @@ Random Search: Best: 1654.8, Worst: 1742.5, Avg: 1703.0, Std Dev: 29.2
 Greedy Search: Distance: 1054.3
 Genetic Algorithm: Best: 768.3, Worst: 1037.2, Avg: 855.5, Std Dev: 76.6
 Tabu Search: Best: 882.8, Worst: 1007.6, Avg: 936.7, Std Dev: 39.5
+Instance: ./instances/A-n32-k5.vrp.txt
+Random Search: Best: 1447.7, Worst: 1647.4, Avg: 1571.3, Std Dev: 55.1
+Greedy Search: Distance: 1054.3
+Genetic Algorithm: Best: 825.1, Worst: 939.2, Avg: 883.8, Std Dev: 40.9
+Tabu Search: Best: 810.6, Worst: 949.6, Avg: 854.6, Std Dev: 38.6
+Instance: ./instances/A-n60-k9.vrp.txt
+Random Search: Best: 2785.1, Worst: 3055.0, Avg: 2981.9, Std Dev: 93.3
+Greedy Search: Distance: 1818.6
+Genetic Algorithm: Best: 1507.1, Worst: 1633.3, Avg: 1588.6, Std Dev: 39.7
+Tabu Search: Best: 1407.6, Worst: 1474.0, Avg: 1438.9, Std Dev: 24.0
+Instance: ./instances/A-n48-k7.vrp.txt
+Random Search: Best: 2209.5, Worst: 2365.9, Avg: 2300.2, Std Dev: 51.1
+Greedy Search: Distance: 1460.5
+Genetic Algorithm: Best: 1203.1, Worst: 1334.6, Avg: 1256.6, Std Dev: 34.0
+Tabu Search: Best: 1108.7, Worst: 1168.9, Avg: 1131.3, Std Dev: 18.5

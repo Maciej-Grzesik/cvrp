@@ -15,6 +15,7 @@ pub fn load_instance(fp: &str) -> Result<Instance, io::Error> {
     let mut demands = Vec::new();
     let mut capacity = 0;
     let mut depo_id = 0;
+    let mut optimal = 0;
 
     let mut section = "";
 
@@ -34,6 +35,7 @@ pub fn load_instance(fp: &str) -> Result<Instance, io::Error> {
                         }
                     }
                     "NODE_COORD_SECTION" => section = "NODE",
+                    
                     "DEMAND_SECTION" => section = "DEMAND",
                     "DEPOT_SECTION" => section = "DEPOT",
                     "EOF" => break,

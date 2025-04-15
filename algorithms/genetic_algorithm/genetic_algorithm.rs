@@ -10,13 +10,16 @@ pub fn genetic_algorithm(
     instance: &Instance,
     generations: i32,
     population_size: i32,
+    crossover_probability: f64,
+    mutation_probability: f64,
 ) -> f64 {
     let mut population: Vec<Vec<i32>> = vec![instance.nodes_id.clone(); population_size as usize];
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);
     let mut rng = rand::rng();
 
-    for individual in &mut population { 
-        individual[1..].shuffle(&mut rng);
+    for individual in &mut population {
+        individual.remove(0);
+        individual.shuffle(&mut rng);
     }
 
     let mut best_run: f64 = f64::INFINITY;
@@ -25,26 +28,25 @@ pub fn genetic_algorithm(
         let mut offspring: Vec<Vec<i32>> = Vec::new();
 
         for _ in 0..(population_size) {
-            let use_parent = rng.random_range(0.0..1.0) < 0.1; 
+            let use_parent = rng.random_range(0.0..1.0) < 0.1;
 
-            let mut parent1 = tournament_selection(&population, instance, &distance_matrix, &mut rng); 
-            let mut parent2 = tournament_selection(&population, instance, &distance_matrix, &mut rng);
-            
+            let mut parent1 =
+                tournament_selection(&population, instance, &distance_matrix, &mut rng);
+            let mut parent2 =
+                tournament_selection(&population, instance, &distance_matrix, &mut rng);
+
             if !use_parent {
                 parent1 = population.choose(&mut rng).unwrap().to_vec();
                 parent2 = population.choose(&mut rng).unwrap().to_vec();
-
             }
 
             let mut child = parent1.clone();
-            if rng.random_range(0.0..1.0) < 0.7 {
+            if rng.random_range(0.0..1.0) < crossover_probability {
                 child = crossover(&parent1, &parent2, &mut rng);
             }
-
-            if rng.random_range(0.0..1.0) < 0.1 {
+            if rng.random_range(0.0..1.0) < mutation_probability {
                 mutate(&mut child, &mut rng);
             }
-
             offspring.push(child);
         }
 
@@ -54,7 +56,7 @@ pub fn genetic_algorithm(
             best_run = current_run;
         }
     }
-    
+
     best_run
 }
 

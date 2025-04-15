@@ -1,4 +1,4 @@
-use rand::{rngs::ThreadRng, Rng};
+use rand::{Rng, rngs::ThreadRng};
 
 pub fn crossover(parent1: &Vec<i32>, parent2: &Vec<i32>, rng: &mut ThreadRng) -> Vec<i32> {
     let size = parent1.len();

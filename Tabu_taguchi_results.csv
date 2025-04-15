@@ -1,0 +1,10 @@
+algorithm,run,config,best,worst,avg,std_dev
+Tabu,1,TabuConfig { tabu_size: 5 },803.311,858.003,828.083,18.507
+Tabu,2,TabuConfig { tabu_size: 10 },803.311,839.053,826.434,14.329
+Tabu,3,TabuConfig { tabu_size: 15 },797.872,832.194,824.058,11.314
+Tabu,4,TabuConfig { tabu_size: 20 },797.872,847.942,819.209,17.916
+Tabu,5,TabuConfig { tabu_size: 25 },797.872,874.254,821.078,23.075
+Tabu,6,TabuConfig { tabu_size: 30 },797.451,860.011,820.274,18.915
+Tabu,7,TabuConfig { tabu_size: 35 },797.451,840.115,827.590,11.093
+Tabu,8,TabuConfig { tabu_size: 41 },808.673,837.239,821.817,11.946
+Tabu,9,TabuConfig { tabu_size: 45 },802.126,832.194,816.303,12.774

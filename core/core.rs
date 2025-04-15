@@ -1,4 +1,5 @@
-use std::usize;
+use std::fs::File;
+use std::io::{Result, Write};
 
 #[derive(Debug)]
 pub struct Instance {
@@ -11,10 +12,14 @@ impl Instance {
     pub fn new(nodes: Vec<Node>, capacity: i32) -> Self {
         let nodes_id = nodes.iter().map(|node| node.id).collect();
 
-        Self { nodes, nodes_id, capacity }
+        Self {
+            nodes,
+            nodes_id,
+            capacity,
+        }
     }
 }
-// kazda metoda przytjmuje instancje i evaluator daje 
+// kazda metoda przytjmuje instancje i evaluator daje
 // matrix dystansow i path i32
 
 #[derive(Debug, Clone, PartialEq)]
@@ -27,8 +32,8 @@ pub struct Node {
 
 #[derive(Debug)]
 pub struct DistanceMatrix {
-   matrix: Vec<Vec<f64>>,
-   demand: Vec<i32>,
+    pub matrix: Vec<Vec<f64>>,
+    pub demand: Vec<i32>,
 }
 
 impl DistanceMatrix {
@@ -54,10 +59,35 @@ impl DistanceMatrix {
     }
 
     pub fn get_distance(&self, i: i32, j: i32) -> f64 {
-        self.matrix[i as usize][j as usize]
+        self.matrix[(i - 1) as usize][(j - 1) as usize]
     }
     pub fn get_demand(&self, i: i32) -> i32 {
-        self.demand[i as usize]
+        self.demand[(i - 1) as usize]
+    }
+    pub fn export_to_csv(&self, filename: &str) -> Result<()> {
+        let mut file = File::create(filename)?;
+
+        let size = self.matrix.len();
+
+        // Nagłówki kolumn
+        writeln!(
+            file,
+            ",{}",
+            (1..=size)
+                .map(|i| i.to_string())
+                .collect::<Vec<_>>()
+                .join(",")
+        )?;
+
+        for (i, row) in self.matrix.iter().enumerate() {
+            // Wiersz zaczyna się od numeru wiersza (1-based)
+            let line = std::iter::once((i + 1).to_string())
+                .chain(row.iter().map(|val| format!("{:.2}", val)))
+                .collect::<Vec<_>>()
+                .join(",");
+            writeln!(file, "{}", line)?;
+        }
+
+        Ok(())
     }
 }
-

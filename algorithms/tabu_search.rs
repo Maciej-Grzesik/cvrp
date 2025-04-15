@@ -1,7 +1,7 @@
-use std::collections::VecDeque;
-use rand::seq::SliceRandom;
 use crate::core::{DistanceMatrix, Instance};
 use crate::evaluator::evaluate;
+use rand::seq::SliceRandom;
+use std::collections::VecDeque;
 
 pub fn tabu_search(instance: &Instance, iterations: i32, tabu_size: usize) -> f64 {
     let distance_matrix: DistanceMatrix = DistanceMatrix::new(&instance.nodes);

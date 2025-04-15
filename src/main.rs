@@ -155,8 +155,7 @@ fn plot_best_path(best_path: &Vec<Node>, name: &str) {
     root.present().unwrap();
 }
 
-fn run_algorithms<A: Algorithm>(algorithm: A) -> (f64, f64, f64, f64)
-    {
+fn run_algorithms<A: Algorithm>(algorithm: A) -> (f64, f64, f64, f64) {
          let mut results = Vec::new();
 
          for _ in 0..10 {
